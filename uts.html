@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menghitung Gaji Karyawan</title>
+</head>
+<body>
+    <h2>Input Data Karyawan</h2>
+    <form>
+        <label for="gajiPokok">Gaji Pokok:</label>
+        <input type="number" id="gajiPokok" name="gajiPokok"><br><br>
+
+        <label for="tunjanganTetap">Tunjangan Tetap:</label>
+        <input type="number" id="tunjanganTetap" name="tunjanganTetap"><br><br>
+
+        <label for="masaKerja">Masa Kerja (bulan):</label>
+        <input type="number" id="masaKerja" name="masaKerja"><br><br>
+
+        <button type="button" onclick="calculateButtonClicked()">Hitung Total</button>
+    </form>
+
+    <h2>Total Hitung</h2>
+    <p id="thr"></p>
+    <p id="pph"></p>
+    <p id="totalPembayaran"></p>
+
+    <script>
+        function calculatePembayaranTHRdanPPH(gajiPokok, tunjanganTetap, masaKerja) {
+            const totalGaji = gajiPokok + tunjanganTetap;
+
+            let thr;
+            if (masaKerja >= 12) {
+                thr = totalGaji;
+            } else if (masaKerja < 12) {
+                thr = (masaKerja / 12) * totalGaji;
+            } else {
+                thr = totalGaji;
+            }
+
+            const tarifPPH = 0.05;
+            const PTKP = 4500000; 
+
+            let pph = 0;
+            if (totalGaji > PTKP) {
+                pph = (totalGaji - PTKP) * tarifPPH;
+            }
+
+            const totalPembayaran = thr - pph;
+
+            return { thr, pph, totalPembayaran };
+        }
+
+        function calculateButtonClicked() {
+            const gajiPokok = parseFloat(document.getElementById('gajiPokok').value);
+            const tunjanganTetap = parseFloat(document.getElementById('tunjanganTetap').value);
+            const masaKerja = parseInt(document.getElementById('masaKerja').value);
+
+            const { thr, pph, totalPembayaran } = calculatePembayaranTHRdanPPH(gajiPokok, tunjanganTetap, masaKerja);
+
+            document.getElementById('thr').innerText = `THR : Rp ${thr.toLocaleString('id-ID')}`;
+            document.getElementById('pph').innerText = `PPH : Rp ${pph.toLocaleString('id-ID')}`;
+            document.getElementById('totalPembayaran').innerText = `Gaji yang diterima karyawwan: Rp ${totalPembayaran.toLocaleString('id-ID')}`;
+        }
+    </script>
+</body>
+</html>
